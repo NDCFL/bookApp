@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>登录</title>
+<link rel="stylesheet" type="text/css" href="css/hui.css" />
+<style>
+	.nav-bottom {
+	    line-height: 40px;
+	    text-align: center;
+	    border-bottom: 1px solid #ccc;
+	    background: #F0F0F0;
+	}
+	.nav-bottom a {
+	    color: #586367;
+	    font-size: 16px;
+	    display: inline-block;
+	    width: 100%;
+	    text-decoration: none;
+	}
+	.nav-bottom div {
+	    width: 20%;
+	    float: left;
+	}
+</style>
+</head>
+<body style="background:#F4F5F6;">
+<header class="hui-header">
+    <div id="hui-back"></div>
+    <h1>登录</h1>
+	<div class="hui-header-sreach-txt"><a href="index.html" style="color: white;">首页</a></div>
+</header>
+<div class="hui-wrap">
+	<div style="padding: 10px;text-align: center;color: #e1544b;" >选择登录方式，登录获得更多特权！</div>
+	  <span id="qqLoginBtn"></span>
+    <div style="padding:10px; padding-top:10px;">
+        <a type="button" class="hui-button hui-button-large" onclick="return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101465328&response_type=token&scope=all&redirect_uri=http%3A%2F%2F192.168.199.201%3A8020%2FbookApp%2Fview%2Faccount.html', 'oauth2Login_10824' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');" style="background-color: #2A9CE2;width:80%;color: white;margin:0 auto;" >
+			  <div style="width: 26%;float: left;" >&nbsp;</div> 
+		    <div style="width: 10%;float: left;" ><img src="img/qq.png"/></div>  
+		    <div style="width: 36%;" >QQ账号登陆</div> 
+        </a>
+    	<button type="button" class="hui-button hui-button-large" style="background-color: #D13130;width:80%;color: white;margin:0 auto;margin-top: 10px;" >
+    		<div style="width: 26%;float: left;" >&nbsp;</div> 
+		    <div style="width: 10%;float: left;" ><img src="img/wx.png"/></div>  
+		    <div style="width: 36%;" >微信账号登陆</div> 
+    	</button>
+    	<a style="display: block;text-align: center;color: #555;padding: 10px;font-size: 16px;" href="index.html">游客试用 &gt;&gt;</a>
+    </div>
+    <!--<div class="login-txt">
+		<p style="color: #666;line-height: 22px;margin-left: 10px;">登录有问题，请尝试：</p>
+		<p style="color: #666;line-height: 22px;margin-left: 10px;">1、刷新页面重试一下；</p>
+		<p style="color: #666;line-height: 22px;margin-left: 10px;">2、清除浏览器历史数据，再次登录。</p>
+	</div>-->
+	<div class="nav-bottom">
+		<div><a href="index.html">首页</a></div>
+		<div><a href="paihangbang.html">排行榜</a></div>
+		<div><a href="wanben.html">完本</a></div>
+		<div><a href="shuku.html">书库</a></div>
+		<div><a href="shujia.html">书架</a></div>
+	</div>
+	<div style="margin-top:22px;">
+    	<ul>
+    		<li>
+    			<a href="javascript:void(0);">
+		    		<div class="hui-list-text">在线联系电话：18370940755</div>
+		    	</a>
+    		</li>
+    		<li>
+    			<a href="jjavascript:void(0);">
+		    		<div class="hui-list-text">在线客服QQ：275300091</div>
+		    	</a>
+    		</li>
+    		<li>
+    			<a href="javascript:void(0);">
+		    		<div class="hui-list-text">问题反馈邮箱：275300091@qq.com</div>
+		    	</a>
+    		</li>
+    	</ul>
+    </div>
+</div>
+<div style="background:#FFFFFF; margin-top:28px;">
+        <span type="button" class="hui-button hui-button-large" onclick="hui.toast('退出');">
+        	鄂ICP备16023444号
+       	</span>
+    </div>
+<script type="text/javascript" src="js/hui.js" charset="UTF-8"></script>
+<script type="text/javascript" src="js/hui-form.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101465328" data-redirecturi="http://192.168.199.201:8020/bookApp/view/account.html" charset="utf-8"></script>
+  <script type="text/javascript">
+      QC.Login({
+          btnId:"qqLoginBtn"    //插入按钮的节点id
+      });
+  </script>
+  </body>
+  <script>
+
+      function getOpenId() {
+          QC.Login.getMe(function(openId, accessToken){
+              alert(openId);
+              alert(accessToken);
+          })
+      }
+
+      function  getInfo() {
+          QC.api("get_user_info", {})
+              .success(function(s){
+                  alert("获取用户信息成功！当前用户昵称为："+s.data.nickname);
+              })
+              .error(function(f){
+                  alert("获取用户信息失败！");
+              })
+              .complete(function(c){
+                  alert("获取用户信息完成！");
+              });
+      }
+  </script>
+<script type="text/javascript">
+	hui('#submit').click(function(){
+	    //验证
+	    var res = huiFormCheck('#form1');
+	    //提交
+	    if(res){hui.iconToast('验证通过！');}
+	});
+</script>
+</body>
+</html>

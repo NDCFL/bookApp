@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>首页</title>
+<link rel="stylesheet" type="text/css" href="./css/hui.css" />
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/common.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/nan.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/index.css?r=45687456">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/book.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/qiehuan.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/swiper.css?t=308400">
+</head>
+<body>
+<div class="zuijin"><span>最近阅读：暂未阅读</span><b><a href="/user/" style="margin-left:5px;">我的中心</a><a href="/user/chongzhi/" style="margin-left:5px;">充值</a></b></div>
+<div class="banner">
+    <ul>
+        <li><a href="/" class="banner-color">首页</a></li>
+        <li><a href="/top?site=1">排行</a></li>
+        <li><a href="/index/wanben/">完本</a></li>
+        <li><a href="/shuku/?site=1">书库</a></li>
+        <li><a href="/user/bookshelf">书架</a></li>
+    </ul>
+</div>
+<div class="search">
+	<form action="/book/searchresult" method="get">
+		<input type="text" placeholder="搜索关键词" name="kw">
+		<i></i>
+	</form>	
+</div>
+<div class="wz">
+	<ul id="title">
+		
+	</ul>
+</div>
+<div class="book-one container">
+		<div>
+			<h3 class="nan-color">主编力荐</h3>
+		</div>
+
+		<div class="one-wrap">
+		</div>
+	</div>
+<script type="text/javascript" src="./js/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="./js/hui.js" charset="UTF-8"></script>
+<script>
+	hui.getJSON(
+	    rootpath+'/books/geBooksByList',
+	    function(msg){
+	    	var html = "";
+	        for(var i=0;i<msg.length;i++){
+	        	html = html+'<a onclick="bookInfo('+msg[i].id+')"><li style="text-align: center;">'+msg[i].name+'</li></a>';
+	        }
+	        $("#title").html(html);
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
+	        console.log(e);
+	    }
+	);
+</script>
+</body>
+</html>
