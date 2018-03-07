@@ -11,15 +11,26 @@
 	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/book.css">
 	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/qiehuan.css">
 	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/swiper.css?t=308400">
+	<style>
+		#allInfo div p{
+			color: #717171;
+		}
+		.one-wrap a{
+			color: #717171;
+		}
+		.home-left span{
+			color: #717171;
+		}
+	</style>
 </head>
 <body>
-<div class="zuijin"><span>最近阅读：暂未阅读</span><b><a href="/user/" style="margin-left:5px;">我的中心</a><a href="/user/chongzhi/" style="margin-left:5px;">充值</a></b></div>
+<div class="zuijin"><span>最近阅读：暂未阅读</span><b><a href="/user/" style="margin-left:5px;">我的中心</a><a href="/user/chongzhi/" style="margin-left:5px;display: none;">充值</a></b></div>
 <div class="banner">
     <ul>
-        <li><a href="/" class="banner-color">首页</a></li>
-        <li><a href="/top?site=1">排行</a></li>
+        <li><a href="/main.html" class="banner-color">首页</a></li>
+        <li><a href="view/paihang.html">排行</a></li>
         <li><a href="/index/wanben/">完本</a></li>
-        <li><a href="/shuku/?site=1">书库</a></li>
+        <li><a href="view/shuku.html">书库</a></li>
         <li><a href="/user/bookshelf">书架</a></li>
     </ul>
 </div>
@@ -34,17 +45,75 @@
 		
 	</ul>
 </div>
-<div class="book-one container">
-		<div>
-			<h3 class="nan-color">主编力荐</h3>
-		</div>
+<div id="allInfo">
 
-		<div class="one-wrap">
-		</div>
-	</div>
+</div>
+<div class="xianshi container no-border mt-10">
+	<h4 class="nan-color">排行榜</h4>
+</div>
+<div class="qiehuan-wrap container">
+	<ul>
+		<li class="li-bg" id="dy" style="border-right: 0px !important;" onclick="dy(0);">订阅榜</li>
+		<li id="zd" onclick="dy(1);">追读榜</li>
+		<li id="xs" onclick="dy(2);" style="border-left: 0px !important;">新书榜</li>
+	</ul> 
+	<div class="clear"></div> 
+	<div class="qiehuan-list"> 
+		
+		
+	</div> 
+</div>
+<div class="back-top-img container" id="gotop"><a href="javascript:scroll(0,0)"><img src="img/back-top.png" alt=""></a></div>
+<div class="nav-bottom bottom-bg">
+	<ul>
+    	<li><a href="/main.html">首页</a></li>
+    	<li><a href="/view/paihang.html">排行榜</a></li>
+    	<li><a href="/index/wanben/">完本</a></li>
+    	<li><a href="view/shuku.html">书库</a></li>
+    	<li><a href="/user/bookshelf">书架</a></li>
+	</ul>
+</div>
+<div style="margin-top:22px;">
+	<ul>
+		<li>
+			<a href="javascript:void(0);">
+	    		<div class="hui-list-text">在线联系电话：18370940755</div>
+	    	</a>
+		</li>
+		<li>
+			<a href="jjavascript:void(0);">
+	    		<div class="hui-list-text">在线客服QQ：275300091</div>
+	    	</a>
+		</li>
+		<li>
+			<a href="javascript:void(0);">
+	    		<div class="hui-list-text">问题反馈邮箱：275300091@qq.com</div>
+	    	</a>
+		</li>
+	</ul>
+</div>
+<div style="background:#FFFFFF; margin-top:28px;">
+    <span type="button" class="hui-button hui-button-large" onclick="hui.toast('退出');">
+    	鄂ICP备16023444号
+   	</span>
+</div>
 <script type="text/javascript" src="./js/jquery.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="./js/hui.js" charset="UTF-8"></script>
 <script>
+	var listHtml = '<a onclick="bookInfo(~)">';
+	listHtml = listHtml + '<div class="home-dy">';
+	listHtml = listHtml + '<div class="home-list border-b">';
+	listHtml = listHtml + '<p class="home-left">';
+	listHtml = listHtml + '<span>~</span>';
+	listHtml = listHtml + '<span>~</span>';
+	listHtml = listHtml + '</p>';
+	listHtml = listHtml + '<p class="home-right">';
+	listHtml = listHtml + '<span style="margin-right: 5px;width:32px">~</span>';
+	listHtml = listHtml + '<span style="width:63px">~</span>';
+	listHtml = listHtml + '</p>';
+	listHtml = listHtml + '</div>';
+	listHtml = listHtml + '</div>';
+	listHtml = listHtml + '</a>';
 	hui.getJSON(
 	    rootpath+'/books/geBooksByList',
 	    function(msg){
@@ -59,6 +128,166 @@
 	        console.log(e);
 	    }
 	);
+	hui.getJSON(
+	    rootpath+'/bookModule/getList',
+	    function(msg){
+	    	var oneHtml="";
+	    	var twoHtml="";
+	    	var one ='<div class="book-one container">';
+			one = one +'<div>';
+			one = one +'<h3 class="nan-color">~</h3></div>';
+			one = one +'<div class="one-wrap">';
+			one = one +'<a onclick="bookInfo(~);">';
+			one = one +'<div class="one-left">';
+			one = one +'<img src="~" alt="">';
+			one = one +'</div>';
+			one = one +'<div class="one-right">';
+			one = one +'<h4>~</h4></div>';
+			one = one +'~';//内容简介
+			one = one +'<div class="one-bottom">';
+			one = one +'<span class="banner-c">追读：~人</span>';
+			one = one +'</div>';
+			one = one +'</a>';
+			one = one +'</div>';
+			one = one +'</div>';
+			var two = '<div class="book-two container">';
+			two = two +'<a  onclick="bookInfo(~);">';
+			two = two +'<div class="two-title">';
+			two = two +'<b>~</b>';
+			two = two +'</div>';
+			two = two +'<p>~</p>';
+			two = two +'<span class="banner-c zhuidu">追读：~人</span>';
+			two = two +'</a>';
+			two = two +'</div>';
+			var allHtml = "";
+			var hot ='<div class="hot_push book-one container">'
+			hot = hot + '<div>';
+			hot = hot + '<h3 class="nan-color mt-10">~</h3>';
+			hot = hot + '</div>';
+			hot = hot + '<div class="hot_read">';
+			hot = hot + '<ul>';
+			var hotList="";
+			hotList = hotList + '<a  onclick="bookInfo(~);">';
+			hotList = hotList + '<li>';
+			hotList = hotList + '<div class="hot_pic">';
+			hotList = hotList + '<img src="~" alt="" style="height: 146.667px;">';
+			hotList = hotList + '</div>';
+			hotList = hotList + '<div class="hot_words">~</div>';
+			hotList = hotList + '</li>';
+			hotList = hotList + '</a>';
+			var endHot = "";
+			endHot = endHot + '</ul>';
+			endHot = endHot + '<div class="clearfix"></div>';
+			endHot = endHot + '</div>';
+			endHot = endHot + '<div class="more container"><a onclick="getOthers(~);">查看更多</a></div>';
+			endHot = endHot + '</div>';
+			var hotHtml = "";
+			var end = '<div class="more container"><a onclick="getOthers(~);">查看更多</a></div>';
+			for(var j=0;j<msg.length;j++){
+				var info = msg[j].booksVoList;
+				if(j==1){
+					allHtml = allHtml + hot.replace("~",msg[j].name);
+					for(var p=0;p<info.length;p++){
+		    			hotHtml = hotHtml + hotList.replace("~",info[p].id).replace("~",rootpath+info[p].faceImg).replace("~","["+info[p].bookTypeName+"]"+info[p].name);
+		    		}
+					endHot = endHot.replace("~",msg[j].id);
+					allHtml = allHtml +hotHtml+endHot;
+				}else{
+					for(var p=0;p<info.length;p++){
+		    			if(p==0){
+		    				var dd=info[p].introduction.replace(/<\/?.+?>/g,"");
+							var dds=dd.replace(/ /g,"");//dds为得到后的内容
+		    				var ins = dds.substring(0,40)+"...";
+		    				oneHtml = oneHtml+one.replace("~",msg[j].name).replace("~",info[p].id).replace("~",rootpath+info[p].faceImg).replace("~","["+info[p].bookTypeName+"]"+info[p].name).replace("~",ins).replace("~",info[p].rewardCount);
+		    			}else{
+		    				var dd=info[p].introduction.replace(/<\/?.+?>/g,"");
+							var dds=dd.replace(/ /g,"");//dds为得到后的内容
+		    				var ins = dds.substring(0,40)+"...";
+		    				twoHtml = twoHtml+two.replace("~",info[p].id).replace("~","["+info[p].bookTypeName+"]"+info[p].name).replace("~",ins).replace("~",info[p].rewardCount);
+		    			}
+	    			}
+				}
+	    		if(j==0 || j==1){
+	    			allHtml = allHtml+(oneHtml+twoHtml);
+	    		}else{
+	    			allHtml = allHtml+(oneHtml+twoHtml)+end.replace("~",msg[j].id);
+	    		}
+	    		oneHtml="";
+	    		twoHtml="";
+	    	}
+	    	$("#allInfo").html(allHtml);
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
+	        console.log(e);
+	    }
+	);
+	function dy(id){
+		if(id==0){
+			$("#dy").attr("class","li-bg");
+			$("#zd").removeAttr("class");
+			$("#xs").removeAttr("class");
+		}else if(id==1){
+			$("#dy").removeAttr("class");
+			$("#zd").attr("class","li-bg");
+			$("#xs").removeAttr("class");
+		}else{
+			$("#dy").removeAttr("class");
+			$("#zd").removeAttr("class");
+			$("#xs").attr("class","li-bg");
+		}
+		hui.getJSON(
+		    rootpath+'/books/getListBooks/'+id,
+		    function(msg){
+		    	var temp = "";
+		    	for(var h=0;h<msg.length;h++){
+		    		temp = temp+listHtml.replace("~",msg[h].id).replace("~",(h+1)+"&nbsp;&nbsp;"+msg[h].name).replace("~",msg[h].author).replace("~",msg[h].isLast==0?"连载":"全本").replace("~",returnFloat(msg[h].wordCount)+"万字");
+		    	}
+		    	temp = temp + '<div class="more container"><a onclick="listOthers('+id+')">查看更多</a></div>';
+		    	$(".qiehuan-list").html(temp);
+		    },
+		    function(e){
+		        hui.iconToast('读取消息失败', 'warn');
+		        console.log(e);
+		    }
+		);
+	}
+	function getOthers(id){
+		alert(id);
+	}
+	hui.getJSON(
+	    rootpath+'/books/getListBooks/0',
+	    function(msg){
+	    	var temp = "";
+	    	for(var h=0;h<msg.length;h++){
+	    		temp = temp+listHtml.replace("~",msg[h].id).replace("~",(h+1)+"&nbsp;&nbsp;"+msg[h].name).replace("~",msg[h].author).replace("~",msg[h].isLast==0?"连载":"全本").replace("~",returnFloat(msg[h].wordCount)+"万字");
+	    	}
+	    	temp = temp + '<div class="more container"><a onclick="listOthers(0)">查看更多</a></div>';
+	    	$(".qiehuan-list").html(temp);
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
+	        console.log(e);
+	    }
+	);
+	function returnFloat(value){
+		var value=parseFloat(value/10000);
+		var xsd=value.toString().substr(0,value.toString().indexOf("."));
+		if(xsd.length<3){
+			value=value.toString()+"0";
+			return value;
+		}else{
+			return value;
+		}
+	}
+	function listOthers(id){
+		alert(id);
+	}
+	function bookInfo(id){
+		localStorage.removeItem("bookid");
+		localStorage.setItem("bookid",id);
+		location.href="view/bookInfo.html";
+	}
 </script>
 </body>
 </html>

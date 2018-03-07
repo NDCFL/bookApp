@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>评论</title>
+  	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/common.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/nan.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/pinglun.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/mulu.css">
+  	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  	<script type="text/javascript" src="https://img.xyxsc.com/front/kuaishu/js/jquery-1.8.3.min.js"></script>
+  	<meta name="format-detection" content="telephone=no" />
+	<script type="text/javascript" src="https://img.xyxsc.com/front/kuaishu/wapjs/common.js"></script>
+	<style>
+  		.hui-list-text{
+  			height: 30px;
+  			margin-left: 10px;
+  		}
+  	</style>
+</head>
+<body>
+	<div class="banner">
+    <ul>
+        <li><a href="../main.html" >首页</a></li>
+        <li><a href="paihang.html" >排行</a></li>
+        <li><a href="/index/wanben/" >完本</a></li>
+        <li><a href="/shuku/?site=1" >书库</a></li>
+        <li><a href="/user/bookshelf" >书架</a></li>
+    </ul>
+</div>
+
+
+	<div class="back-top fixed-top nan-tb">
+	    <span>评论</span>
+	    <a class="back" onClick="javascript :history.back(-1);"></a>
+	</div>
+	<div class="pinglun-wrap container line-b">
+		<form action="/comment/dopost" method="post" id="newform">
+			<h4><a href="bookInfo.html" id="name"></a></h4>
+			<p id="plcnt"></p>
+			<input type="hidden" name="bookid" value="2038474"/>
+			<textarea name="content"></textarea>
+			<div class="pub-btn mt-10 pb-0">
+				<a href="#" class="nan-bg">发布评论</a>
+			</div>
+		</form>
+	</div>
+	<div id="plList">
+	</div>
+	<div class="page container">
+		<a onclick="upPage();">上一页</a>
+		<select id="page" class="m_s" onchange="getPl(this.value);">
+		</select>
+		<a onclick="downPage();">下一页</a>
+	</div>
+	<div class="nav-bottom bottom-bg">
+		<ul>
+	    	<li><a href="/main.html">首页</a></li>
+	    	<li><a href="/view/paihang.html">排行榜</a></li>
+	    	<li><a href="/index/wanben/">完本</a></li>
+	    	<li><a href="/shuku/?site=1">书库</a></li>
+	    	<li><a href="/user/bookshelf">书架</a></li>
+		</ul>
+	</div>
+	<div style="margin-top:22px;">
+		<ul>
+			<li>
+				<a href="javascript:void(0);">
+		    		<div class="hui-list-text">在线联系电话：18370940755</div>
+		    	</a>
+			</li>
+			<li>
+				<a href="jjavascript:void(0);">
+		    		<div class="hui-list-text">在线客服QQ：275300091</div>
+		    	</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);">
+		    		<div class="hui-list-text">问题反馈邮箱：275300091@qq.com</div>
+		    	</a>
+			</li>
+		</ul>
+	</div>
+	<input type="hidden" id="sid" value="1" />
+	<input type="hidden" id="sum" />
+	<p style="height: 40px;text-align: center;margin-top: 10px;">鄂ICP备16023444号</p>
+<script type="text/javascript" src="../js/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="../js/hui.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../js/select2.min.js" charset="UTF-8"></script>
+<script>
+	var bookName = localStorage.getItem("bookName");
+	var bookId = localStorage.getItem("bookid");
+	var html = '<div class="pinglun-list container">';
+		html = html + '<div class="pl-text"><span class="nan-color" style="color:#4696e6">~</span>~</div>';
+		html = html + '<div class="pl-footer">';
+		html = html + '<div class="pl-time"><i></i>~</div>';
+		html = html + '</div>';
+		html = html + '</div>';
+	$("#name").html(bookName);
+	hui.postJSON(
+	    rootpath+'/booksDiscuss/mulu',
+	    {
+	    	pageSize:5,
+	    	pageNo:1,
+	    	bookId:bookId
+	    },
+	    function(msg){
+			$("#sum").val(msg.total);
+			$("#plcnt").html("评论（"+msg.temp+"条）");
+			$("#page").select2({
+	            data: msg.mulu
+	        });
+	        $("#select2-page-container").remove();
+			$("#cnt").html("（"+msg.total+"条）");
+			var info = "";
+			for(var i=0;i<msg.rows.length;i++){
+				info = info + html.replace("~",msg.rows[i].userVo.name).replace("~","说："+msg.rows[i].content).replace("~",getDate(msg.rows[i].publishTime));
+			}
+			$("#plList").html(info);
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
+	        console.log(e);
+	    }
+	);
+	function getPl(id){
+		hui.postJSON(
+		    rootpath+'/booksDiscuss/getMulu',
+		    {
+		    	bookId:bookId,
+		    	pageSize:5,
+		    	pageNo:id
+		    },
+		    function(msg){
+		    	console.log(msg);
+		    	var info = "";
+				for(var i=0;i<msg.length;i++){
+					info = info + html.replace("~",msg[i].userVo.name).replace("~","说："+msg[i].content).replace("~",getDate(msg[i].publishTime));
+				}
+	            $("#plList").html(info);
+	            $("#sid").val(parseInt(id));
+	            
+		    },
+		    function(e){
+		        hui.iconToast('读取消息失败', 'warn');
+		        console.log(e);
+		    }
+		);
+	}
+	function upPage(){
+		hui.postJSON(
+		    rootpath+'/booksDiscuss/getMulu',
+		    {
+		    	bookId:bookId,
+		    	pageSize:5,
+		    	pageNo:parseInt($("#sid").val())-1
+		    },
+		    function(msg){
+				var info = "";
+				for(var i=0;i<msg.length;i++){
+					info = info + html.replace("~",msg[i].userVo.name).replace("~","说："+msg[i].content).replace("~",getDate(msg[i].publishTime));
+				}
+				$("#plList").html(info);
+				var role = $("#page").select2();//获取selectid
+	            if(parseInt($("#sid").val())-1<1){
+	            	role.val(1).trigger("change");
+	            	role.change();
+	            }else{
+	            	role.val(parseInt($("#sid").val())-1).trigger("change");
+	            	role.change();
+	            }
+	            $("#select2-page-container").remove();
+	            if(parseInt($("#sid").val())<=1){
+	            	$("#sid").val(1);
+	            }else{
+	            	$("#sid").val(parseInt($("#sid").val())-1);
+	            }
+		    },
+		    function(e){
+		        hui.iconToast('读取消息失败', 'warn');
+		        console.log(e);
+		    }
+		);
+	}
+	function downPage(){
+		hui.postJSON(
+		    rootpath+'/booksDiscuss/getMulu',
+		    {
+		    	bookId:bookId,
+		    	pageSize:5,
+		    	pageNo:parseInt($("#sid").val())+1
+		    },
+		    function(msg){
+				var info = "";
+				for(var i=0;i<msg.length;i++){
+					info = info + html.replace("~",msg[i].userVo.name).replace("~","说："+msg[i].content).replace("~",getDate(msg[i].publishTime));
+				}
+				$("#plList").html(info);
+				var role = $("#page").select2();//获取selectid
+	            if(parseInt($("#sid").val())+1>=parseInt($("#sum").val())){
+	            	role.val(parseInt($("#sum").val())).trigger("change");
+	            	role.change();
+	            }else{
+	            	role.val(parseInt($("#sid").val())+1).trigger("change");
+	            	role.change();
+	            }
+	            $("#select2-page-container").remove();
+	            if(parseInt($("#sid").val())>=parseInt($("#sum").val())){
+	            	$("#sid").val(parseInt($("#sum").val()));
+	            }else{
+	            	$("#sid").val(parseInt($("#sid").val())+1);
+	            }
+		    },
+		    function(e){
+		        hui.iconToast('读取消息失败', 'warn');
+		        console.log(e);
+		    }
+		);
+	}
+</script>
+</html>

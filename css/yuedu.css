@@ -1,0 +1,269 @@
+html,body{
+	background: #EBE4DA;
+}
+.yd-sc{
+	clear: both;
+	background: url(../img/sc_bg.png) repeat-x;
+	height: 40px;
+	line-height: 40px;
+	overflow: hidden;
+	padding:0px 10px;
+	opacity: 0.8;
+}
+.yd-sc h3{
+	float: left;
+	color: #dd7748;
+	font-weight: 600;
+}
+.yd-sc .sc-btn{
+	float: right;
+}
+.yd-sc .sc-btn a{
+	padding:2px 8px;
+	border: 1px solid #D5D5D5;
+}
+.yd-sc .sc-btn a:first-child{
+	background: #EA835D;
+	color: #fff;
+	margin-right: 5px;
+}
+.yd-sc .sc-btn a:last-child{
+	background: #F4F3EC;
+}
+.sc-mulu{
+	padding:10px;
+}
+.sc-mulu{
+	color: #059B94;
+}
+.sc-mulu a{
+	color: #059B94;
+}
+.sc-mulu i{
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	background: url(../img/home1.png) no-repeat;
+	background-size: 100%;
+	background-position: 0px 0px;
+	vertical-align: middle;
+}
+.sc-yuedu{
+	overflow: hidden;
+	padding:0px 10px;
+	-webkit-box;
+	display: box;
+}
+.sc-yuedu .yd-left{
+	float: left;
+	-webkit-box-flex: 1;
+	box-flex: 1;
+}
+.sc-yuedu .yd-left h3{
+	color: #F0AB27;
+	margin-top: 10px;
+}
+.sc-yuedu .yd-left p{
+	font-size: 12px;
+	margin-top: 10px;
+	color: #999;
+}
+.sc-yuedu .yd-right{
+	float: right;
+	width: 105px;
+	position: relative;
+}
+.sc-yuedu .yd-right a{
+	display: inline-block;
+	width: 45px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	background: #BBBBBB;
+	border-radius: 5px;
+	font-size: 13px;
+	margin-left: 5px;
+	margin-bottom: 10px;
+	color: #fff;
+}
+.sc-yuedu .yd-right span{
+	display: inline-block;
+	width: 45px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	background: #BBBBBB;
+	border-radius: 5px;
+	font-size: 13px;
+	margin-left: 5px;
+	margin-bottom: 10px;
+	cursor: pointer;
+	color: #fff;
+}
+.yd-text{
+    padding:10px;
+}
+.yd-text p{
+	text-indent: 2em;
+	padding-bottom: 10px;
+	line-height: 1.6em;
+}
+.yd-text img{
+	width:  100%;
+	display: block;
+}
+.page{
+	padding:10px;
+	text-align: center;
+}
+.page a{
+	display: inline-block;
+	height: 40px;
+	width: 70px;
+	text-align: center;
+	line-height: 40px;
+}
+.page .page-up{
+	background: url(../img/left.png) no-repeat;
+	background-size: 100%;
+	background-position: 0px 0px;
+	margin-right: 10px;
+}
+.page .page-main{
+	background: url(../img/main.png) no-repeat;
+	background-size: 100%;
+	background-position: 0px 0px;
+}
+.page .page-down{
+	background: url(../img/right.png) no-repeat;
+	background-size: 100%;
+	background-position: 0px 0px;
+	margin-left: 10px;
+}
+.yuedu-bg{
+	background: #E0DDD8;
+	margin-bottom: 10px;
+}
+.yuedu-bg a{
+	color: #666 !important;
+	font-size: 14px !important;
+}
+.two-code{
+	padding:10px;
+}
+.two-code p{
+	text-align: center;
+}
+.two-code p:first-child{
+	font-size: 16px;
+}
+.two-code p:last-child{
+	font-size: 12px;
+	margin-top: 10px;
+}
+.two-code img{
+	display: block;
+	width: 40%;
+	margin:0 auto;
+	margin-top: 10px;
+}
+.bottom-bg{
+	background: #E9E6E0;
+}
+.line-bb{
+	border-bottom: 1px solid #ccc;
+}
+.yuedu-banner{
+	background: #FC5689;
+}
+.tuijian{
+	padding:0px 10px;
+}
+.yd-color{
+	color: #D44740;
+}
+.yuedu-page{
+	margin-top: 10px;
+}
+.yuedu-page .next{
+	background: #4696e6;
+	display: block;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 5px;
+	color: #fff;
+	text-align: center;
+	width: 96%;
+	margin:0 auto;
+}
+.yuedu-page p{
+	margin-top: 10px;
+	margin-left: 2%;
+}
+
+
+/*澶滈棿妯″紡*/
+body.yejian_body{
+	background: #282828;
+	color: #6b7980;
+}
+body.yejian_body .zuijin{
+	border-bottom: none;
+}
+body.yejian_body .zuijin b a{
+	border-left: none;
+}
+.yejian_body .yd-sc{
+	background-color: #472e2c;
+}
+
+.yejian_body .sc-mulu{
+	color: #8f8f8f;
+}
+.yejian_body .sc-mulu a{
+	color: #8f8f8f;
+}
+
+.yejian_body .sc-yuedu .yd-left p{
+	color: #8f8f8f;
+}
+
+.yejian_body .sc-yuedu .yd-right a,
+.yejian_body .sc-yuedu .yd-right span,
+.yejian_body .sc-yuedu .yd-right span.yejian_btn{
+	background-color: #666666;
+	color: #cdcdcd;
+}
+
+.sc-yuedu .yd-right span.yejian_btn{
+	position: absolute;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	text-indent: -999em;
+	right: 109px;
+	top: 40px;
+	background: #DDDDDD url('../img/yejian_btn_bg.png') no-repeat center;
+	background-size: 100% auto;
+}
+
+.yejian_body .page .page-up{
+	color: #fff;
+	background-image: url(../img/yejian_left.png);
+}
+
+.yejian_body .page .page-main{
+	background: #c2473b;
+	color: #fff;
+	border-radius: 4px;
+}
+
+.yejian_body .page .page-down{
+	color: #fff;
+	background-image: url(../img/yejian_right.png);
+}
+
+.yejian_body .yuedu-page .next
+{
+	background:#c2473b;
+}
+/*澶滈棿妯″紡*/
