@@ -31,20 +31,15 @@
 	    <ul>
 	        <li><a href="../main.html">首页</a></li>
 	        <li><a href="paihang.html" >排行</a></li>
-	        <li><a href="/index/wanben/" >完本</a></li>
-	        <li><a href="/shuku/?site=1" class="banner-color">书库</a></li>
+	        <li><a href="wanben.html" >完本</a></li>
+	        <li><a href="shuku.html" class="banner-color">书库</a></li>
 	        <li><a href="/user/bookshelf" >书架</a></li>
 	    </ul>
 	</div>
 	<!-- 导航结束 -->
 		<div class="shuku-main">
 		<div class="title nan-bg">都市言情</div>
-		<ul>
-			<li><a href="/book/lists?category_id=14">异术超能</a></li>
-			<li><a href="/book/lists?category_id=15">都市生活</a></li>
-			<li><a href="/book/lists?category_id=16">黑白两道</a></li>
-			<li><a href="/book/lists?category_id=17">官场商战</a></li>
-			<li><a href="/book/lists?category_id=18">青春校园</a></li>
+		<ul id="lists">
 		</ul>
 	</div>
 	<!-- 客服信息开始 -->
@@ -52,7 +47,7 @@
 		<ul>
 	    	<li><a href="../main.html">首页</a></li>
 	    	<li><a href="paihang.html">排行榜</a></li>
-	    	<li><a href="/index/wanben/">完本</a></li>
+	    	<li><a href="wanben.html">完本</a></li>
 	    	<li><a href="shuku.html">书库</a></li>
 	    	<li><a href="/user/bookshelf">书架</a></li>
 		</ul>
@@ -80,5 +75,27 @@
   </body>
 <script type="text/javascript" src="../js/jquery.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="../js/hui.js" charset="UTF-8"></script>
-
+<script>
+	//获取所有的小说类型作为书库
+	var html = '<li><a onclick="getList(~);">~</a></li>';
+	hui.getJSON(
+	    rootpath+'/bookModule/bookModuleAllList',
+	    function(msg){
+			var list = "";
+			for(var i=2;i<msg.length;i++){
+				list = list + html.replace("~",msg[i].id).replace("~",msg[i].name);
+			}
+			$("#lists").html(list);
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
+	        console.log(e);
+	    }
+	);
+	function getList(id){
+		localStorage.removeItem("module_id");
+		localStorage.setItem("module_id",id);
+		location.href="modulebook.html";
+	}
+</script>
 </html>

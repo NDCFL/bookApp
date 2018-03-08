@@ -55,53 +55,10 @@
 		<div class="xihuan container">
 			<h3>这些也很有趣哦</h3>
 		</div>
-				<a href="/book/?bookid=2018925">
-			<div class="book-two container "  >
-				<div class="two-title">
-					<b>[都市]那些年，我爱过的女人</b>
-				</div>
-				<p>女朋友跟我交往了五年，终于到了谈婚论嫁，可就在这时她告诉我怀孕了，但孩子却不是我的！</p>
-				<span class="banner-c zhuidu">追读：60612695人</span> 
-			</div>
-			</a>
-				<a href="/book/?bookid=2018913">
-			<div class="book-two container "  >
-				<div class="two-title">
-					<b>[都市]我那不堪回首的家庭</b>
-				</div>
-				<p>我爸意外去世，谁知这老家伙在外面包养的小三找上门，竟然要分我家财产，还要我照顾她一辈子</p>
-				<span class="banner-c zhuidu">追读：36838457人</span> 
-			</div>
-			</a>
-				<a href="/book/?bookid=2014449">
-			<div class="book-two container "  >
-				<div class="two-title">
-					<b>[都市]﻿妇科小村医</b>
-				</div>
-				<p>正在偷看村长和他媳妇做运动，谁知村长媳妇得了病，想要治好只能阴阳调和，刚好我是处男！</p>
-				<span class="banner-c zhuidu">追读：72591451人</span> 
-			</div>
-			</a>
-				<a href="/book/?bookid=2018922">
-			<div class="book-two container "  >
-				<div class="two-title">
-					<b>[都市]另类保镖：美女总裁爱上我</b>
-				</div>
-				<p>一代兵王卸甲之后，为了挽救妹妹的生命，无奈之下卖身给女总裁当保镖，最终却抱得美人归</p>
-				<span class="banner-c zhuidu">追读：67200571人</span> 
-			</div>
-			</a>
-				<a href="/book/?bookid=2018923">
-			<div class="book-two container  no-border"  >
-				<div class="two-title">
-					<b>[都市]超级领班</b>
-				</div>
-				<p>这是一个超级屌丝狗胆包天冒充高富帅的逆天神话，相信我，这里，有你们想看到的一切！</p>
-				<span class="banner-c zhuidu">追读：19364371人</span> 
-			</div>
-			</a>
-			</div> 
-
+		<div id="yq">
+			
+		</div>
+	</div>
 	<div class="remind" style="display: none">
 	    <p>亲爱的读者：夜已深，请打开夜间阅读模式保护您的双眼。</p>
 	    <span></span>
@@ -111,7 +68,7 @@
 		<ul>
 	    	<li><a href="../main.html">首页</a></li>
 	    	<li><a href="paihang.html">排行榜</a></li>
-	    	<li><a href="/index/wanben/">完本</a></li>
+	    	<li><a href="wanben.html">完本</a></li>
 	    	<li><a href="shuku.html">书库</a></li>
 	    	<li><a href="/user/bookshelf">书架</a></li>
 		</ul>
@@ -152,6 +109,32 @@
 	    	$("#time").html(getDate(msg.publishTime)+"更新");
 	    	$("#bname").html(msg.booksVo.name);
 	    	$("#sid").val(msg.id);
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
+	        console.log(e);
+	    }
+	);
+	var five = '<a onclick="bookInfo(~);">';
+	five = five +'<div class="book-two container "  >';
+	five = five +'<div class="two-title">';
+	five = five +'<b>~</b>';
+	five = five +'</div>';
+	five = five +'<p>~</p>';
+	five = five +'<span class="banner-c zhuidu">~</span> ';
+	five = five +'</div>';
+	five = five +'</a>';
+	hui.getJSON(
+	    rootpath+'/books/getFiveBooks',
+	    function(msg){
+	    	var all = "";
+	    	for(var i=0;i<msg.length;i++){
+	    		var dd=msg[i].introduction.replace(/<\/?.+?>/g,"");
+				var dds=dd.replace(/ /g,"");//dds为得到后的内容
+				var ins = dds.substring(0,40)+"...";
+				all = all + five.replace("~",msg[i].id).replace("~","["+msg[i].bookTypeName+"]&nbsp;&nbsp;"+msg[i].name).replace("~",ins).replace("~","追读："+msg[i].readCount+"人");		
+	    	}
+	    	$("#yq").html(all);
 	    },
 	    function(e){
 	        hui.iconToast('读取消息失败', 'warn');
@@ -231,6 +214,11 @@
 		scroll(0,0);
 	}
 	function book(){
+		location.href="bookInfo.html";
+	}
+	function bookInfo(id){
+		localStorage.removeItem("bookid");
+		localStorage.setItem("bookid",id);
 		location.href="bookInfo.html";
 	}
 </script>

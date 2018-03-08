@@ -29,15 +29,15 @@
     <ul>
         <li><a href="/main.html" class="banner-color">首页</a></li>
         <li><a href="view/paihang.html">排行</a></li>
-        <li><a href="/index/wanben/">完本</a></li>
+        <li><a href="view/wanben.html">完本</a></li>
         <li><a href="view/shuku.html">书库</a></li>
         <li><a href="/user/bookshelf">书架</a></li>
     </ul>
 </div>
 <div class="search">
-	<form action="/book/searchresult" method="get">
-		<input type="text" placeholder="搜索关键词" name="kw">
-		<i></i>
+	<form action="view/sousuo.html" method="get">
+		<input type="text" placeholder="搜索书搜作者" name="kw">
+		<i id="search"></i>
 	</form>	
 </div>
 <div class="wz">
@@ -68,7 +68,7 @@
 	<ul>
     	<li><a href="/main.html">首页</a></li>
     	<li><a href="/view/paihang.html">排行榜</a></li>
-    	<li><a href="/index/wanben/">完本</a></li>
+    	<li><a href="view//wanben.html">完本</a></li>
     	<li><a href="view/shuku.html">书库</a></li>
     	<li><a href="/user/bookshelf">书架</a></li>
 	</ul>
@@ -115,7 +115,7 @@
 	listHtml = listHtml + '</div>';
 	listHtml = listHtml + '</a>';
 	hui.getJSON(
-	    rootpath+'/books/geBooksByList',
+	    rootpath+'/books/getBooksByList',
 	    function(msg){
 	    	var html = "";
 	        for(var i=0;i<msg.length;i++){
@@ -187,23 +187,23 @@
 				var info = msg[j].booksVoList;
 				if(j==1){
 					allHtml = allHtml + hot.replace("~",msg[j].name);
-					for(var p=0;p<info.length;p++){
+					for(var p=0;p<6;p++){
 		    			hotHtml = hotHtml + hotList.replace("~",info[p].id).replace("~",rootpath+info[p].faceImg).replace("~","["+info[p].bookTypeName+"]"+info[p].name);
 		    		}
 					endHot = endHot.replace("~",msg[j].id);
 					allHtml = allHtml +hotHtml+endHot;
 				}else{
-					for(var p=0;p<info.length;p++){
+					for(var p=0;p<5;p++){
 		    			if(p==0){
 		    				var dd=info[p].introduction.replace(/<\/?.+?>/g,"");
 							var dds=dd.replace(/ /g,"");//dds为得到后的内容
 		    				var ins = dds.substring(0,40)+"...";
-		    				oneHtml = oneHtml+one.replace("~",msg[j].name).replace("~",info[p].id).replace("~",rootpath+info[p].faceImg).replace("~","["+info[p].bookTypeName+"]"+info[p].name).replace("~",ins).replace("~",info[p].rewardCount);
+		    				oneHtml = oneHtml+one.replace("~",msg[j].name).replace("~",info[p].id).replace("~",rootpath+info[p].faceImg).replace("~","["+info[p].bookTypeName+"]"+info[p].name).replace("~",ins).replace("~",info[p].readCount);
 		    			}else{
 		    				var dd=info[p].introduction.replace(/<\/?.+?>/g,"");
 							var dds=dd.replace(/ /g,"");//dds为得到后的内容
 		    				var ins = dds.substring(0,40)+"...";
-		    				twoHtml = twoHtml+two.replace("~",info[p].id).replace("~","["+info[p].bookTypeName+"]"+info[p].name).replace("~",ins).replace("~",info[p].rewardCount);
+		    				twoHtml = twoHtml+two.replace("~",info[p].id).replace("~","["+info[p].bookTypeName+"]"+info[p].name).replace("~",ins).replace("~",info[p].readCount);
 		    			}
 	    			}
 				}
@@ -253,7 +253,13 @@
 		);
 	}
 	function getOthers(id){
-		alert(id);
+		if(id==2){
+			location.href="view/wanben.html";
+		}else{
+			localStorage.removeItem("module_id");
+			localStorage.setItem("module_id",id);
+			location.href="view/modulebook.html";
+		}
 	}
 	hui.getJSON(
 	    rootpath+'/books/getListBooks/0',
@@ -281,13 +287,18 @@
 		}
 	}
 	function listOthers(id){
-		alert(id);
+		localStorage.removeItem("paihang_id");
+		localStorage.setItem("paihang_id",id);
+		location.href="view/paihang.html";
 	}
 	function bookInfo(id){
 		localStorage.removeItem("bookid");
 		localStorage.setItem("bookid",id);
 		location.href="view/bookInfo.html";
 	}
+	$("#search").click(function(){
+		alert("搜索");
+	});
 </script>
 </body>
 </html>

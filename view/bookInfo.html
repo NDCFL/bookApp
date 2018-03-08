@@ -40,7 +40,7 @@
     <ul>
         <li><a href="../main.html"  >首页</a></li>
         <li><a href="paihang.html" >排行</a></li>
-        <li><a href="/index/wanben/" >完本</a></li>
+        <li><a href="wanben.html" >完本</a></li>
         <li><a href="shuku.html" >书库</a></li>
         <li><a href="/user/bookshelf" >书架</a></li>
     </ul>
@@ -71,19 +71,19 @@
 		<ul>
 			<li>
 				<h4 id="sc"></h4>
-				<a href="javascript:void(0)" id="btn_fav" class="sc">
+				<a onclick="handle(0);" id="btn_fav" class="sc">
 					收藏
 				</a>
 			</li>
 			<li>
 				<h4 id="ds"></h4>
-				<a href="/user/reward?bookid=107051" id="btn_fav">
+				<a onclick="handle(1);"  id="btn_fav">
 					打赏
 				</a>
 			</li>
 			<li>
 				<h4 id="pl"></h4>
-				<a href="pinglun.html">
+				<a onclick="handle(2);" >
 					评论
 				</a>
 			</li>
@@ -99,7 +99,7 @@
 	</div>
 	<div class="mulu-list container">
 		<h3>目录</h3>
-		<a href="/book/content/?bookid=107051&chapterid=3920242">
+		<a onclick="lastSection();">
 			<div class="new_mulu line-b">
 				<p>
 					<span class="nan-color" style="color: #4696e6;">最新章节</span> 
@@ -130,8 +130,8 @@
 	<div class="nav-bottom bottom-bg">
 		<ul>
 	    	<li><a href="/main.html">首页</a></li>
-	    	<li><a href="/view/paihang.html">排行榜</a></li>
-	    	<li><a href="/index/wanben/">完本</a></li>
+	    	<li><a href="paihang.html">排行榜</a></li>
+	    	<li><a href="wanben.html">完本</a></li>
 	    	<li><a href="shuku.html">书库</a></li>
 	    	<li><a href="/user/bookshelf">书架</a></li>
 		</ul>
@@ -160,17 +160,29 @@
 	    	鄂ICP备16023444号
 	   	</span>
 	</div>	<!-- 客服信息结束 -->
+	<input type="hidden" id="sb">
+	<input type="hidden" id="last" />
 <script type="text/javascript" src="../js/jquery.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="../js/hui.js" charset="UTF-8"></script>
 <script type="text/javascript" src="https://img.xyxsc.com/front/kuaishu/wapjs/common.js"></script>
 <script>
+	var bookId = localStorage.getItem("bookid");
+	//点击量加1
+	hui.getJSON(
+	    rootpath+'/books/addBooks/'+bookId,
+	    function(msg){
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
+	        console.log(e);
+	    }
+	);
 	var html = '<div class="pinglun-list container">';
 		html = html + '<div class="pl-text"><span class="nan-color" style="color:#4696e6">~</span>~</div>';
 		html = html + '<div class="pl-footer">';
 		html = html + '<div class="pl-time"><i></i>~</div>';
 		html = html + '</div>';
 		html = html + '</div>';
-	var bookId = localStorage.getItem("bookid");
 	hui.getJSON(
 	    rootpath+'/books/findBooks/'+bookId,
 	    function(msg){
@@ -220,9 +232,14 @@
 		hui.getJSON(
 		    rootpath+'/booksSection/getMaxAndMinVo/'+bookId,
 		    function(msg){
-		    	localStorage.removeItem("section_id");
-				localStorage.setItem("section_id",msg.minId);
-				location.href="sectionInfo.html";
+		    	if(msg.minId==0){
+		    		hui.toast('暂无目录,无法阅读', 1000);
+		    		return  false;
+		    	}else{
+		    		localStorage.removeItem("section_id");
+					localStorage.setItem("section_id",msg.minId);
+					location.href="sectionInfo.html";
+		    	}
 		    },
 		    function(e){
 		        hui.iconToast('读取消息失败', 'warn');
@@ -248,12 +265,18 @@
 	    rootpath+'/booksSection/getList/'+bookId,
 	    function(msg){
 	    	console.log(msg);
+	    	if(msg=="[]"){
+	    		alert("asdfsaf");
+	    	}
+	    		
 	    	var dd=msg[0].content.replace(/<\/?.+?>/g,"");
 			var dds=dd.replace(/ /g,"");//dds为得到后的内容
 			var ins = dds.substring(0,30)+"...";
 	    	$("#last_time").html("更新时间："+getDate(msg[0].publishTime)+"更新");
 	    	$("#last_name").html(msg[0].name+"&nbsp;&nbsp;"+msg[0].title);
 	    	$("#last_text").html(ins);
+	    	$("#last").val(msg[0].id);
+	    	$("#sb").val(msg[0].bookMoney);
 	    	var hts = '<a onclick="sectionInfo(~);">';
 			hts = hts + '<li>';
 			hts = hts + '<span>~</span>';
@@ -280,6 +303,30 @@
 		localStorage.removeItem("bookName");
 		localStorage.setItem("bookName",$("#book_names").html());
 		location.href="pinglun.html";
+	}
+	var phone = localStorage.getItem("phone");
+	function lastSection(){
+		if(parseInt($("#sb").val())==0){
+			localStorage.removeItem("section_id");
+			localStorage.setItem("section_id",parseInt($("#last").val()));
+			location.href="sectionInfo.html";
+		}else{
+//			if(!phone){
+//				location.href="../login.html";
+//			}else{
+//				hui.toast("收费章节需要"+$("#sb").val()+"个书币", timer);
+//			}
+			hui.toast("收费章节需要"+$("#sb").val()+"个书币", 1000);
+		}
+	}
+	function handle(id){
+		var hand = new Array("收藏","打赏","评论");
+		if(hand[id].toString().indexOf("评论")>-1){
+			otherPl();
+		}else{
+			hui.toast(hand[id], 1000);
+		}
+		
 	}
 </script>
 </html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>搜索</title>
+	<link rel="stylesheet" type="text/css" href="../css/hui.css" />
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/common.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/nan.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/index.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/book.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/mulu.css">
+  	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  	<script type="text/javascript" src="https://img.xyxsc.com/front/kuaishu/js/jquery-1.8.3.min.js"></script>
+  	<meta name="format-detection" content="telephone=no" />
+	<script type="text/javascript" src="https://img.xyxsc.com/front/kuaishu/wapjs/common.js"></script>
+	<style>
+  		.hui-list-text{
+  			height: 30px;
+  			margin-left: 10px;
+  		}
+  		span{
+  			color: #555;
+  		}
+  		h3{
+  			color: #555;
+  		}
+  		p{
+  			color: #555;
+  			font-size: 14px;
+  		}
+  	</style>
+</head>
+<body>
+<div class="back-top fixed-top nan-tb">
+	    <span>搜索</span>
+	    <a class="back" href="../main.html"></a>
+	</div>
+	<!-- 搜索开始 -->
+	<div class="search">
+		<form action="" method="get">
+            <input name="kw" id="kw" type="search" placeholder="搜书搜作者"  autocomplete="off" />
+			<i></i>
+      	</form>
+	</div>
+	<!-- 搜索结束 -->
+	<!-- 搜索开始 -->
+	<div class="book-one container" id="titles">
+		<h3 class="nan-color">搜索结果：</h3>
+		
+	</div>
+	<div id="find">
+		<div id="list">
+		
+		</div>
+		<div class="page container">
+			<a onclick="upPage();">上一页</a>
+			<select id="page" class="m_s" onchange="getPl(this.value);">
+			</select>
+			<a onclick="downPage();">下一页</a>
+		</div>
+	</div>
+	<div class="two-code">
+  		<a href="https://zj.xyxsc.com/index/appdown">
+			<img src="https://img.xyxsc.com/front/m/images/appdown_small1.png" alt="" style="width: 100%">
+		</a>
+	</div>
+	<div class="qiehuan-list"> 
+		<div class="xihuan container">
+			<h3>这些也很有趣哦</h3>
+		</div>
+		<div id="yq">
+			
+		</div>
+	</div>
+	<div class="nav-bottom bottom-bg">
+		<ul>
+	    	<li><a href="../main.html">首页</a></li>
+	    	<li><a href="paihang.html">排行榜</a></li>
+	    	<li><a href="wanben.html">完本</a></li>
+	    	<li><a href="shuku.html">书库</a></li>
+	    	<li><a href="/user/bookshelf">书架</a></li>
+		</ul>
+	</div>
+	<div style="margin-top:22px;">
+		<ul class="">
+			<li>
+				<a href="javascript:void(0);">
+		    		<div class="hui-list-text">在线联系电话：18370940755</div>
+		    	</a>
+			</li>
+			<li>
+				<a href="jjavascript:void(0);">
+		    		<div class="hui-list-text">在线客服QQ：275300091</div>
+		    	</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);">
+		    		<div class="hui-list-text">问题反馈邮箱：275300091@qq.com</div>
+		    	</a>
+			</li>
+		</ul>
+		<p style="height: 40px;text-align: center;margin-top: 10px;">鄂ICP备16023444号</p>
+		<input type="hidden" id="sid" />
+		<input type="hidden" id="sum" />
+	</div>
+<script type="text/javascript" src="../js/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="../js/hui.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../js/select2.min.js" charset="UTF-8"></script>
+<script>
+	var one = '<a onclick="bookInfo(~);">';
+	one = one + '<div class="book-two container">';
+	one = one + '<div class="two-title">';
+	one = one + '<b>~</b>';
+	one = one + '</div>';
+	one = one + '<p>~</p>';
+	one = one + '<span class="banner-c zhuidu">~</span>';
+	one = one + '</div>';
+	one = one + '</a>';
+	var urlVal=window.location.href;
+	var search = decodeURI(urlVal.substr(urlVal.indexOf("=")+1,urlVal.length));
+	$("#kw").val(search);
+	hui.postJSON(
+	    rootpath+'/books/mulu',
+	    {
+	    	pageSize:10,
+	    	pageNo:0,
+	    	searchVal:decodeURI(search)
+	    },
+	    function(msg){
+	    	if(msg.temp==0){
+	    		$("#find").hide();
+	    		$("#titles").append('<p style="height: 40px;text-align: center;margin-top: 10px;">暂无搜索数据</p>');
+	    		return false;
+	    	}else{
+	    		$("#find").show();
+	    	}
+			$("#page").select2({
+                data: msg.mulu
+            });
+            $("#select2-page-container").remove();
+            var infos = "";
+            for(var i=0;i<msg.rows.length;i++){
+            	var dd=msg.rows[i].introduction.replace(/<\/?.+?>/g,"");
+				var dds=dd.replace(/ /g,"");//dds为得到后的内容
+				var ins = dds.substring(0,40)+"...";
+            	infos = infos + one.replace("~",msg.rows[i].id).replace("~","["+msg.rows[i].bookTypeName+"]&nbsp;&nbsp;"+msg.rows[i].name).replace("~",ins).replace("~","追读："+msg.rows[i].readCount+"人");
+            }
+            $("#list").html(infos);
+            $("#sid").val(1);
+            $("#sum").val(msg.total);
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
+	        console.log(e);
+	    }
+	);
+	var five = '<a onclick="bookInfo(~);">';
+	five = five +'<div class="book-two container "  >';
+	five = five +'<div class="two-title">';
+	five = five +'<b>~</b>';
+	five = five +'</div>';
+	five = five +'<p>~</p>';
+	five = five +'<span class="banner-c zhuidu">~</span> ';
+	five = five +'</div>';
+	five = five +'</a>';
+	hui.getJSON(
+	    rootpath+'/books/getFiveBooks',
+	    function(msg){
+	    	var all = "";
+	    	for(var i=0;i<msg.length;i++){
+	    		var dd=msg[i].introduction.replace(/<\/?.+?>/g,"");
+				var dds=dd.replace(/ /g,"");//dds为得到后的内容
+				var ins = dds.substring(0,40)+"...";
+				all = all + five.replace("~",msg[i].id).replace("~","["+msg[i].bookTypeName+"]&nbsp;&nbsp;"+msg[i].name).replace("~",ins).replace("~","追读："+msg[i].readCount+"人");		
+	    	}
+	    	$("#yq").html(all);
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
+	        console.log(e);
+	    }
+	);
+	function upPage(){
+		if(parseInt($("#sid").val())==1){
+			hui.toast('已经是第一页', 1000);
+			return false;
+		}
+		hui.postJSON(
+		    rootpath+'/books/getMulu',
+		    {
+		    	pageSize:10,
+		    	pageNo:parseInt($("#sid").val())-1,
+		    	searchVal:decodeURI(search)
+		    },
+		    function(msg){
+		    	if(msg.temp==0){
+		    		$("#find").hide();
+		    		return false;
+		    	}else{
+		    		$("#find").show();
+		    	}
+		    	var infos = "";
+	            for(var i=0;i<msg.length;i++){
+	            	var dd=msg[i].introduction.replace(/<\/?.+?>/g,"");
+					var dds=dd.replace(/ /g,"");//dds为得到后的内容
+					var ins = dds.substring(0,40)+"...";
+	            	infos = infos + one.replace("~",msg[i].id).replace("~","["+msg[i].bookTypeName+"]&nbsp;&nbsp;"+msg[i].name).replace("~",ins).replace("~","追读："+msg[i].readCount+"人");
+	            }
+	            $("#list").html(infos);
+	            var role = $("#page").select2();//获取selectid
+	            if(parseInt($("#sid").val())-1<1){
+	            	role.val(1).trigger("change");
+	            	role.change();
+	            }else{
+	            	role.val(parseInt($("#sid").val())-1).trigger("change");
+	            	role.change();
+	            }
+	            $("#select2-page-container").remove();
+	            if(parseInt($("#sid").val())<=1){
+	            	$("#sid").val(1);
+	            }else{
+	            	$("#sid").val(parseInt($("#sid").val())-1);
+	            }
+		    },
+		    function(e){
+		        hui.iconToast('读取消息失败', 'warn');
+		        console.log(e);
+		    }
+		);
+	}
+	function downPage(){
+		if(parseInt($("#sid").val())==parseInt($("#sum").val())){
+			hui.toast('已经是最后一页', 1000);
+			return false;
+		}
+		hui.postJSON(
+		    rootpath+'/books/getMulu',
+		    {
+		    	pageSize:10,
+		    	pageNo:parseInt($("#sid").val())+1,
+		    	searchVal:decodeURI(search)
+		    },
+		    function(msg){
+		    	if(msg.temp==0){
+		    		$("#find").hide();
+		    		return false;
+		    	}else{
+		    		$("#find").show();
+		    	}
+		    	var infos = "";
+	            for(var i=0;i<msg.length;i++){
+	            	var dd=msg[i].introduction.replace(/<\/?.+?>/g,"");
+					var dds=dd.replace(/ /g,"");//dds为得到后的内容
+					var ins = dds.substring(0,40)+"...";
+	            	infos = infos + one.replace("~",msg[i].id).replace("~","["+msg[i].bookTypeName+"]&nbsp;&nbsp;"+msg[i].name).replace("~",ins).replace("~","追读："+msg[i].readCount+"人");
+	            }
+	            $("#list").html(infos);
+	            var role = $("#page").select2();//获取selectid
+	            if(parseInt($("#sid").val())+1>=parseInt($("#sum").val())){
+	            	role.val(parseInt($("#sum").val())).trigger("change");
+	            	role.change();
+	            }else{
+	            	role.val(parseInt($("#sid").val())+1).trigger("change");
+	            	role.change();
+	            }
+	            $("#select2-page-container").remove();
+	            if(parseInt($("#sid").val())>=parseInt($("#sum").val())){
+	            	$("#sid").val(parseInt($("#sum").val()));
+	            }else{
+	            	$("#sid").val(parseInt($("#sid").val())+1);
+	            }
+	            
+		    },
+		    function(e){
+		        hui.iconToast('读取消息失败', 'warn');
+		        console.log(e);
+		    }
+		);
+	}
+	function getPl(no){
+		hui.postJSON(
+		    rootpath+'/books/getMulu',
+		    {
+		    	pageSize:20,
+		    	pageNo:no,
+		    	searchVal:decodeURI(search)
+		    },
+		    function(msg){
+		    	if(msg.temp==0){
+		    		$("#find").hide();
+		    		return false;
+		    	}else{
+		    		$("#find").show();
+		    	}
+		    	var infos = "";
+	            for(var i=0;i<msg.length;i++){
+	            	var dd=msg[i].introduction.replace(/<\/?.+?>/g,"");
+					var dds=dd.replace(/ /g,"");//dds为得到后的内容
+					var ins = dds.substring(0,40)+"...";
+	            	infos = infos + one.replace("~",msg[i].id).replace("~","["+msg[i].bookTypeName+"]&nbsp;&nbsp;"+msg[i].name).replace("~",ins).replace("~","追读："+msg[i].readCount+"人");
+	            }
+	            $("#list").html(infos);
+
+	            $("#sid").val(parseInt(no));
+	            
+		    },
+		    function(e){
+		        hui.iconToast('读取消息失败', 'warn');
+		        console.log(e);
+		    }
+		);
+	}
+	function bookInfo(id){
+		localStorage.removeItem("bookid");
+		localStorage.setItem("bookid",id);
+		location.href="bookInfo.html";
+	}
+</script>
+</body>
+</html>

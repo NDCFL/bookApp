@@ -18,6 +18,16 @@
 		.bg-color{
 			background-color: #4696e6;
 		}
+		span{
+  			color: #555;
+  		}
+  		h3{
+  			color: #555;
+  		}
+  		p{
+  			color: #555;
+  			font-size: 14px
+  		}
 	</style>
 </head>
 <body>
@@ -31,8 +41,8 @@
     <ul>
         <li><a href="../main.html"  >首页</a></li>
         <li><a href="paihang.html" class="banner-color">排行</a></li>
-        <li><a href="/index/wanben/" >完本</a></li>
-        <li><a href="/shuku/?site=1" >书库</a></li>
+        <li><a href="wanben.html" >完本</a></li>
+        <li><a href="shuku.html" >书库</a></li>
         <li><a href="/user/bookshelf" >书架</a></li>
     </ul>
 </div>
@@ -46,61 +56,177 @@
 	<!-- 排行榜开始 -->
 	<div class="qiehuan-wrap container mt-0">
 		<ul>
-			<li  style="border-right: 0px !important;"><a href="/top/?site=1&type=1" style="color:#4696e6;">订阅榜</a></li> 
-			<li class="li-bg" ><a href="/top/?site=1&type=2" style="color:#fff;">收藏榜</a></li>
-			<li  style="border-left: 0px !important;"><a href="/top/?site=1&type=3" style="color:#4696e6;">更新榜</a></li>
+			<li class="li-bg" id="dy" style="border-right: 0px !important;" onclick="dy(0);">订阅榜</li>
+			<li id="zd" onclick="dy(1);">追读榜</li>
+			<li id="xs" onclick="dy(2);" style="border-left: 0px !important;">新书榜</li>
 		</ul> 
 		<div class="clear"></div> 
 		<!-- 订阅 开始-->
 		<div class="qiehuan-list" id="top_lists_d"> 
-			<div class="book-one container">
-				<a href="/book/?bookid=50000022">
-					<div class="two-title">
-						<span class="nan-bg">TOP2</span>
-						<b class="nan-color">[都市]﻿乡野村情</b>
-					</div>
-					<p>简介：村里有个闲汉名叫张大雕，他偶然之间得到妇科医术传承，从此女人在他面在不再有任何秘密</p>
-					<div class="au-num">
-						<span class="banner-c zhuidu">追读：49969592人</span>
-					</div>
-					 
-				</a>
-			</div>
 		</div> 
+		<div class="more container" id="more_list"><a onclick="mores();" id="show_more">查看更多</a></div>
 	</div>
-	<div class="more container"><a href="javascript:void(0);" id="show_more" page="2" >查看更多</a></div>
 	<!-- 客服信息开始 -->
 	<div class="nav-bottom bottom-bg">
 		<ul>
         	<li><a href="../main.html">首页</a></li>
-        	<li><a href="paihang.html" class="bg-color">排行榜</a></li>
-        	<li><a href="/index/wanben/">完本</a></li>
-        	<li><a href="/shuku/?site=1">书库</a></li>
+        	<li><a href="paihang.html">排行榜</a></li>
+        	<li><a href="wanben.html">完本</a></li>
+        	<li><a href="shuku.html">书库</a></li>
         	<li><a href="/user/bookshelf">书架</a></li>
 		</ul>
 	</div>
-<div style="margin-top:22px;">
-	<ul>
-		<li>
-			<a href="javascript:void(0);">
-	    		<div class="hui-list-text">在线联系电话：18370940755</div>
-	    	</a>
-		</li>
-		<li>
-			<a href="jjavascript:void(0);">
-	    		<div class="hui-list-text">在线客服QQ：275300091</div>
-	    	</a>
-		</li>
-		<li>
-			<a href="javascript:void(0);">
-	    		<div class="hui-list-text">问题反馈邮箱：275300091@qq.com</div>
-	    	</a>
-		</li>
-	</ul>
-</div>
-<div style="background:#FFFFFF; margin-top:28px;">
-    <span type="button" class="hui-button hui-button-large" onclick="hui.toast('退出');">
-    	鄂ICP备16023444号
-   	</span>
-</div>
+	<div style="margin-top:22px;">
+		<ul>
+			<li>
+				<a href="javascript:void(0);">
+		    		<div class="hui-list-text">在线联系电话：18370940755</div>
+		    	</a>
+			</li>
+			<li>
+				<a href="jjavascript:void(0);">
+		    		<div class="hui-list-text">在线客服QQ：275300091</div>
+		    	</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);">
+		    		<div class="hui-list-text">问题反馈邮箱：275300091@qq.com</div>
+		    	</a>
+			</li>
+		</ul>
+	</div>
+	<div style="background:#FFFFFF; margin-top:28px;">
+	    <span type="button" class="hui-button hui-button-large" onclick="hui.toast('退出');">
+	    	鄂ICP备16023444号
+	   	</span>
+	</div>
+	<input type="hidden" id="page_size" value="10"/>
+	<input type="hidden" id="page_no" value="0"/>
+	<input type="hidden" id="m_id" value=""/>
+</body>
+<script type="text/javascript" src="../js/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="../js/hui.js" charset="UTF-8"></script>
+<script>
+	var one = "";
+	var two = "";
+	var oneHtml = '<div class="book-one container">';
+	oneHtml = oneHtml +'<a onclick="bookInfo(~);">';
+	oneHtml = oneHtml +'<div class="one-wrap">';
+	oneHtml = oneHtml +'<div class="one-left dym-wrap">';
+	oneHtml = oneHtml +'<img src="~" alt="">';
+	oneHtml = oneHtml +'</div>';
+	oneHtml = oneHtml +'<div class="one-right">';
+	oneHtml = oneHtml +'<h4 class="nan-color">~</h4>';
+	oneHtml = oneHtml +'<p>~</p>';
+	oneHtml = oneHtml +'<div class="one-bottom">';
+	oneHtml = oneHtml +'<b class="banner-c zhuidu">~</b>';
+	oneHtml = oneHtml +'</div>';
+	oneHtml = oneHtml +'</div>';
+	oneHtml = oneHtml +'</div>';
+	oneHtml = oneHtml +'</a>';
+	oneHtml = oneHtml +'</div>';
+	var twoHtml = '<div class="book-one container">';
+	twoHtml = twoHtml + '<a onclick="bookInfo(~);">';
+	twoHtml = twoHtml + '<div class="two-title">';
+	twoHtml = twoHtml + '<span class="nan-bg">TOP~</span>';
+	twoHtml = twoHtml + '<b class="nan-color">~</b>';
+	twoHtml = twoHtml + '</div>';
+	twoHtml = twoHtml + '<p>~</p>';
+	twoHtml = twoHtml + '<div class="au-num">';
+	twoHtml = twoHtml + '<span class="banner-c zhuidu">~</span>';
+	twoHtml = twoHtml + '</div>';
+	twoHtml = twoHtml + '</a>';
+	twoHtml = twoHtml + '</div>';
+	var paihang_id = localStorage.getItem("paihang_id");
+	dy(paihang_id);
+	function dy(id){
+		$("#m_id").val(id);
+		localStorage.removeItem("paihang_id");
+		localStorage.setItem("paihang_id",id);
+		$("#page_no").val(0);
+		if(id==0){
+			$("#dy").attr("class","li-bg");
+			$("#zd").removeAttr("class");
+			$("#xs").removeAttr("class");
+		}else if(id==1){
+			$("#dy").removeAttr("class");
+			$("#zd").attr("class","li-bg");
+			$("#xs").removeAttr("class");
+		}else{
+			$("#dy").removeAttr("class");
+			$("#zd").removeAttr("class");
+			$("#xs").attr("class","li-bg");
+		}
+		hui.postJSON(
+		    rootpath+'/books/getListByBook',
+		    {
+		    	id:id,
+		    	pageNo:$("#page_no").val(),
+		    	pageSize:$("#page_size").val()
+		    },
+		    function(msg){
+		        console.log(msg);
+		        var temp = "";
+		        if(msg.length<parseInt($("#page_size").val())){
+		        	$("#more_list").hide();
+		        }else{
+		        	$("#more_list").show();
+		        }
+		        for(var i=0;i<msg.length;i++){
+		        	if(i==0){
+		        		var dd=msg[i].introduction.replace(/<\/?.+?>/g,"");
+						var dds=dd.replace(/ /g,"");//dds为得到后的内容
+						var ins = dds.trim().substring(0,40);
+		        		temp = temp + oneHtml.replace("~",msg[i].id).replace("~",rootpath+msg[i].faceImg).replace("~","["+msg[i].bookTypeName+"]&nbsp;&nbsp;"+msg[i].name).replace("~",ins).replace("~","追读："+msg[i].readCount+"人");
+		        	}else{
+		        		var dd=msg[i].introduction.replace(/<\/?.+?>/g,"");
+						var dds=dd.replace(/ /g,"");//dds为得到后的内容
+						var ins = dds.trim().substring(0,40);
+		        		temp = temp + twoHtml.replace("~",msg[i].id).replace("~",(i+1)).replace("~","["+msg[i].bookTypeName+"]&nbsp;&nbsp;"+msg[i].name).replace("~",ins).replace("~","追读："+msg[i].readCount+"人");
+		        	}
+		        }
+		        $("#top_lists_d").html(temp);
+		    },
+		    function(e){
+		        hui.iconToast('读取消息失败', 'warn');
+		    }
+		);
+	}
+	function mores(){
+		$("#page_no").val(parseInt($("#page_no").val())+parseInt($("#page_size").val()));
+		hui.postJSON(
+		    rootpath+'/books/getListByBook',
+		    {
+		    	id:parseInt($("#m_id").val()),
+		    	pageNo:$("#page_no").val(),
+		    	pageSize:$("#page_size").val()
+		    },
+		    function(msg){
+		        console.log(msg);
+		        var temp = "";
+		        if(msg.length<parseInt($("#page_size").val())){
+		        	$("#more_list").hide();
+		        	hui.toast('已经到最尾部', 1000);
+		        }else{
+		        	$("#more_list").show();
+		        }
+		        for(var i=0;i<msg.length;i++){
+	        		var dd=msg[i].introduction.replace(/<\/?.+?>/g,"");
+					var dds=dd.replace(/ /g,"");//dds为得到后的内容
+					var ins = dds.trim().substring(0,40);
+	        		temp = temp + twoHtml.replace("~",msg[i].id).replace("~",parseInt($("#page_no").val())+(i+1)).replace("~","["+msg[i].bookTypeName+"]&nbsp;&nbsp;"+msg[i].name).replace("~",ins).replace("~","追读："+msg[i].readCount+"人");
+		        }
+		        $("#top_lists_d").append(temp);
+		    },
+		    function(e){
+		        hui.iconToast('读取消息失败', 'warn');
+		    }
+		);
+	}
+	function bookInfo(id){
+		localStorage.removeItem("bookid");
+		localStorage.setItem("bookid",id);
+		location.href="bookInfo.html";
+	}
+</script>
 </html>

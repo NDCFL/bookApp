@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>完本</title>
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/common.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/nan.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/index.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/mulu.css">
+	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/book.css">
+  	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  	<script type="text/javascript" src="https://img.xyxsc.com/front/kuaishu/js/jquery-1.8.3.min.js"></script>
+  	<meta name="format-detection" content="telephone=no" />
+    <style>
+  		.hui-list-text{
+  			height: 30px;
+  			margin-left: 10px;
+  		}
+  	</style>
+</head>
+<body>
+	<div class="zuijin">
+		<span>最近阅读：暂未阅读</span>		
+		<b>
+			<a href="/user/chongzhi/">充值</a> 
+		</b>
+	</div>
+	<!-- 导航开始 -->
+	<div class="banner">
+    <ul>
+        <li><a href="../main.html"  >首页</a></li>
+        <li><a href="paihang.html" >排行</a></li>
+        <li><a href="wanben.html" class="banner-color">完本</a></li>
+        <li><a href="shuku.html" >书库</a></li>
+        <li><a href="/user/bookshelf" >书架</a></li>
+    </ul>
+</div>
+	<!-- 导航结束 -->
+	<div class="mulu-top container line-b">
+		<h5>书已养肥，一次看个够！</h5>
+	</div>
+	<!-- 完本开始 -->
+	<div id="lists">
+		
+	</div>
+	<!-- 完本结束 -->
+	<!-- 客服信息开始 -->
+	<div class="nav-bottom bottom-bg">
+		<ul>
+	    	<li><a href="../main.html">首页</a></li>
+	    	<li><a href="paihang.html">排行榜</a></li>
+	    	<li><a href="wanben.html">完本</a></li>
+	    	<li><a href="shuku.html">书库</a></li>
+	    	<li><a href="/user/bookshelf">书架</a></li>
+		</ul>
+	</div>
+	<div style="margin-top:22px;">
+		<ul class="">
+			<li>
+				<a href="javascript:void(0);">
+		    		<div class="hui-list-text">在线联系电话：18370940755</div>
+		    	</a>
+			</li>
+			<li>
+				<a href="jjavascript:void(0);">
+		    		<div class="hui-list-text">在线客服QQ：275300091</div>
+		    	</a>
+			</li>
+			<li>
+				<a href="javascript:void(0);">
+		    		<div class="hui-list-text">问题反馈邮箱：275300091@qq.com</div>
+		    	</a>
+			</li>
+		</ul>
+		<p style="height: 40px;text-align: center;margin-top: 10px;">鄂ICP备16023444号</p>
+		<input type="hidden" id="sid" />
+	</div>
+</body>
+<script type="text/javascript" src="../js/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="../js/hui.js" charset="UTF-8"></script>
+<script>
+	hui.getJSON(
+	    rootpath+'/bookModule/getLists',
+	    function(msg){
+	    	var oneHtml="";
+			var twoHtml="";
+			var allHtml="";
+			var allHtmls="";
+		    var one ='<div class="book-one container">';
+			one = one +'<div>';
+			one = one +'<h3 class="nan-color">~</h3></div>';
+			one = one +'<div class="one-wrap">';
+			one = one +'<a onclick="bookInfo(~);">';
+			one = one +'<div class="one-left">';
+			one = one +'<img src="~" alt="">';
+			one = one +'</div>';
+			one = one +'<div class="one-right">';
+			one = one +'<h4>~</h4></div>';
+			one = one +'~';//内容简介
+			one = one +'<div class="one-bottom">';
+			one = one +'<span class="banner-c">追读：~人</span>';
+			one = one +'</div>';
+			one = one +'</a>';
+			one = one +'</div>';
+			one = one +'</div>';
+			var two = '<div class="book-two container">';
+			two = two +'<a  onclick="bookInfo(~);">';
+			two = two +'<div class="two-title">';
+			two = two +'<b>~</b>';
+			two = two +'</div>';
+			two = two +'<p>~</p>';
+			two = two +'<span class="banner-c zhuidu">追读：~人</span>';
+			two = two +'</a>';
+			two = two +'</div>';
+	    	for(var i=0;i<2;i++){
+	    		if(i==0){
+	    			var cnt = parseInt(msg[0][0].booksVoList.length);
+			    	for(var p=0;p<cnt;p++){
+			    		var info = msg[0][0].booksVoList[p];
+			    		var dd=info.introduction.replace(/<\/?.+?>/g,"");
+						var dds=dd.replace(/ /g,"");//dds为得到后的内容
+						var ins = dds.substring(0,40)+"...";
+		    			if(p==0){
+		    				oneHtml = oneHtml+one.replace("~",msg[0][0].name).replace("~",info.id).replace("~",rootpath+info.faceImg).replace("~","["+info.bookTypeName+"]"+info.name).replace("~",ins).replace("~",info.readCount);
+		    			}else{
+		    				twoHtml = twoHtml+two.replace("~",info.id).replace("~","["+info.bookTypeName+"]"+info.name).replace("~",ins).replace("~",info.rewardCount);
+		    			}
+					}
+			    	
+			    	allHtmls = oneHtml+twoHtml;
+	    		}else{
+	    			var oneHtml="";
+	    			var twoHtml="";
+	    			var cnt = parseInt(msg[1].length);
+			    	for(var p=0;p<cnt;p++){
+			    		var info = msg[1][p];
+			    		var dd=info.introduction.replace(/<\/?.+?>/g,"");
+						var dds=dd.replace(/ /g,"");//dds为得到后的内容
+						var ins = dds.substring(0,40)+"...";
+		    			if(p==0){
+		    				oneHtml = oneHtml+one.replace("~","最热完本").replace("~",info.id).replace("~",rootpath+info.faceImg).replace("~","["+info.bookTypeName+"]"+info.name).replace("~",ins).replace("~",info.readCount);
+		    			}else{
+		    				twoHtml = twoHtml+two.replace("~",info.id).replace("~","["+info.bookTypeName+"]"+info.name).replace("~",ins).replace("~",info.readCount);
+		    			}
+		    			allHtml = oneHtml+twoHtml;
+					}
+			    	allHtmls = allHtmls + allHtml;
+	    		}
+	    	}
+	    	$("#lists").html(allHtmls);
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
+	        console.log(e);
+	    }
+	);
+	function bookInfo(id){
+		localStorage.removeItem("bookid");
+		localStorage.setItem("bookid",id);
+		location.href="bookInfo.html";
+	}
+</script>
+</html>
