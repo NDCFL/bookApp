@@ -4,6 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>评论</title>
+	<link rel="stylesheet" type="text/css" href="../css/hui.css" />
   	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/common.css">
 	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/nan.css">
 	<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/pinglun.css">
@@ -13,9 +14,23 @@
   	<meta name="format-detection" content="telephone=no" />
 	<script type="text/javascript" src="https://img.xyxsc.com/front/kuaishu/wapjs/common.js"></script>
 	<style>
-  		.hui-list-text{
-  			height: 30px;
-  			margin-left: 10px;
+  		span{
+  			color: #666666;
+  		}
+  		h3{
+  			color: #666666;
+  		}
+  		p{
+  			color: #666666;
+  		}
+  		.nan-color{
+  			color: #666666;
+  		}
+  		.pl-text{
+  			color: #666666;
+  		}
+  		.pl-time{
+  			color: #666666;
   		}
   	</style>
 </head>
@@ -29,22 +44,17 @@
         <li><a href="/user/bookshelf" >书架</a></li>
     </ul>
 </div>
-
-
 	<div class="back-top fixed-top nan-tb">
 	    <span>评论</span>
 	    <a class="back" onClick="javascript :history.back(-1);"></a>
 	</div>
 	<div class="pinglun-wrap container line-b">
-		<form action="/comment/dopost" method="post" id="newform">
-			<h4><a href="bookInfo.html" id="name"></a></h4>
-			<p id="plcnt"></p>
-			<input type="hidden" name="bookid" value="2038474"/>
-			<textarea name="content"></textarea>
-			<div class="pub-btn mt-10 pb-0">
-				<a href="#" class="nan-bg">发布评论</a>
-			</div>
-		</form>
+		<h4><a href="bookInfo.html" id="name"></a></h4>
+		<p id="plcnt"></p>
+		<textarea id="content"></textarea>
+		<div class="pub-btn mt-10 pb-0">
+			<a onclick="pinglun();" class="nan-bg">发布评论</a>
+		</div>
 	</div>
 	<div id="plList">
 	</div>
@@ -66,7 +76,7 @@
 	<div style="margin-top:22px;">
 		<ul>
 			<li>
-				<a href="javascript:void(0);">
+				<a href="tel://18370940755">
 		    		<div class="hui-list-text">在线联系电话：18370940755</div>
 		    	</a>
 			</li>
@@ -91,6 +101,10 @@
 <script>
 	var bookName = localStorage.getItem("bookName");
 	var bookId = localStorage.getItem("bookid");
+	var id = localStorage.getItem("id");
+	if(!id){
+		location.href="../login.html";
+	}
 	var html = '<div class="pinglun-list container">';
 		html = html + '<div class="pl-text"><span class="nan-color" style="color:#4696e6">~</span>~</div>';
 		html = html + '<div class="pl-footer">';
@@ -98,11 +112,13 @@
 		html = html + '</div>';
 		html = html + '</div>';
 	$("#name").html(bookName);
-	hui.postJSON(
+	refush();
+	function refush(){
+		hui.postJSON(
 	    rootpath+'/booksDiscuss/mulu',
 	    {
 	    	pageSize:5,
-	    	pageNo:1,
+	    	pageNo:0,
 	    	bookId:bookId
 	    },
 	    function(msg){
@@ -124,6 +140,7 @@
 	        console.log(e);
 	    }
 	);
+	}
 	function getPl(id){
 		hui.postJSON(
 		    rootpath+'/booksDiscuss/getMulu',
@@ -215,6 +232,36 @@
 		    function(e){
 		        hui.iconToast('读取消息失败', 'warn');
 		        console.log(e);
+		    }
+		);
+	}
+	function pinglun(){
+		var content = $("#content").val();
+		if(!content){
+			hui.toast('评论内容不能为空', 1000);
+			return;
+		}
+		var arr = ['黄','赌','毒','尼玛','操蛋'];
+		var res = content.replace(new RegExp(arr.join('|'),'img'),'*');
+		hui.postJSON(
+			rootpath+"/booksDiscuss/booksDiscussAddSave",
+			{
+				booksId:bookId,
+				userId:id,
+				content:res
+				
+			},
+			function(msg){
+		        if(msg.result=="fail"){
+		        	hui.toast('发布评论失败', 1000);
+		        }else{
+		        	$("#btn_fav").html("已收藏");
+		        	hui.toast('发布评论成功', 1000);
+		        	refush();
+		        }
+		    },
+		    function(e){
+		        hui.iconToast('读取消息失败', 'warn');
 		    }
 		);
 	}

@@ -5,30 +5,40 @@
 <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>个人中心</title>
 <link rel="stylesheet" type="text/css" href="../css/hui.css" />
+<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/common.css">
+<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/nan.css">
+<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/mulu.css">
+<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/xiangqing.css">
+<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/book.css">
+<link rel="stylesheet" href="https://img.xyxsc.com/front/kuaishu/css/pinglun.css">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="format-detection" content="telephone=no" />
+<style>
+</style>
 </head>
 <body>
-<header class="hui-header">
-    <div onClick="javascript :history.back(-1);" id="hui-back"></div>
-    <h1>个人中心</h1>
+<header class="hui-header" >
+	<div style="color: white;font-size:16px; height:44px; line-height:44px; overflow:hidden;font-weight:400;margin-left: 5px;" onclick="indexTo();">首页</div>
+    <h1 style="width: 90%;padding:0px 0px 0px 0px;">个人中心</h1>
 </header>
-<div class="hui-wrap">
-    <div class="hui-list" style="background:#FFFFFF; margin-top:28px;">
+<div class="hui-wrap" >
+    <div class="hui-list" style="background:#FFFFFF; margin-top:0px;">
         <a href="javascript:hui.toast('Hello Hcoder UI !');" style="height:auto; height:80px; padding-bottom:8px;">
     		<div class="hui-list-icons" style="width:110px; height:80px;">
-    			<img src="../img/list/home.png" style="width:66px; margin:0px; border-radius:50%;" />
+    			<img src="../img/face.gif" id="face" style="width:66px; margin:0px; border-radius:50%;" />
     		</div>
     		<div class="hui-list-text" style="height:79px; line-height:79px;">
-    			<div class="hui-list-text-content">
-    				Hcoder.net
+    			<div class="hui-list-text-content" id="name">
+    				点兔图书
     			</div>
     			<div class="hui-list-info">
     				<span class="hui-icons hui-icons-right"></span>
     			</div>
     		</div>
     	</a>
-    	<a href="javascript:hui.toast('Hello Hcoder UI !');">
-    		<div class="hui-list-text">
-    			账户余额 : 1000元 | 积分 : 2000
+    	<a>
+    		<div class="hui-list-text" style="display: block;" id="qita">
+    			
     		</div>
     	</a>
     </div>
@@ -89,17 +99,78 @@
         </ul>
     </div>
     <div style="background:#FFFFFF; margin-top:28px;">
-        <button type="button" class="hui-button hui-button-large" onclick="hui.toast('退出');">
+        <button type="button" class="hui-button hui-button-large" onclick="exit();">
         	<span class="hui-icons hui-icons-logoff"></span>退出系统
        	</button>
     </div>
 </div>
+<script type="text/javascript" src="../js/jquery.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="../js/hui.js" charset="UTF-8"></script>
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101465328" data-redirecturi="http://192.168.199.201:8020/bookApp/view/account.html" charset="utf-8"></script>
 <script>
 //	var phone = localStorage.getItem("phone");
 //	if(!phone){
 //		location.href="../login.html";
 //	}
+QC.Login.getMe(function(openId, accessToken){
+//	alert(accessToken);
+	hui.postJSON(
+		rootpath+"/user/findByOpenid",
+		{
+			openid:openId,
+			qb:0
+		},
+		function(msg){
+	        if(msg.result=="fail"){
+	        	getInfo(openId);
+	        }else{
+	        	var info = JSON.parse(msg.message);
+	        	$("#qita").html("书豆余额 : "+info.money+"个 | 类型 : "+(info.isVip==0?"普通用户":"VIP"));
+	        	localStorage.removeItem("id");
+	        	localStorage.setItem("id",info.id);
+	        	$("#name").html(info.name);
+	        	document.getElementById("face").src=info.faceImg;
+	        }
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
+	    }
+	);
+});
+function  getInfo(openId) {
+	QC.api("get_user_info", {})
+	.success(function(s){
+	    document.getElementById("face").src=s.data.figureurl_qq_1;
+	    $("#name").html(s.data.nickname);
+	    hui.postJSON(
+			rootpath+"/user/addUserByQQ",
+			{
+				info:JSON.stringify(s.data),
+				openid:openId
+			},
+			function(msg){
+		        $("#name").html(info.name);
+	        	document.getElementById("face").src=info.faceImg;
+	        	$("#qita").html('书豆余额 : 0个 | 类型 : 普通用户');
+		    },
+		    function(e){
+		        hui.iconToast('读取消息失败', 'warn');
+		    }
+		);
+	})
+	.error(function(f){
+	    alert("获取用户信息失败！");
+	})
+	.complete(function(c){
+	});
+}
+function indexTo(){
+	location.href="../main.html";
+}
+function exit(){
+	localStorage.removeItem("id");
+	location.href="../login.html";
+}
 </script>
 </body>
 </html>

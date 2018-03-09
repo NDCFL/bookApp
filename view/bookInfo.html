@@ -139,7 +139,7 @@
 	<div style="margin-top:22px;">
 		<ul>
 			<li>
-				<a href="javascript:void(0);">
+				<a href="tel://18370940755">
 		    		<div class="hui-list-text">在线联系电话：18370940755</div>
 		    	</a>
 			</li>
@@ -167,6 +167,7 @@
 <script type="text/javascript" src="https://img.xyxsc.com/front/kuaishu/wapjs/common.js"></script>
 <script>
 	var bookId = localStorage.getItem("bookid");
+	var id = localStorage.getItem("id");
 	//点击量加1
 	hui.getJSON(
 	    rootpath+'/books/addBooks/'+bookId,
@@ -175,6 +176,22 @@
 	    function(e){
 	        hui.iconToast('读取消息失败', 'warn');
 	        console.log(e);
+	    }
+	);
+	//判断改用户是否收藏过图书
+	hui.postJSON(
+		rootpath+"/booksCollect/findCollect",
+		{
+			booksId:bookId,
+			userId:id
+		},
+		function(msg){
+	        if(msg.result=="success"){
+	        	$("#btn_fav").html("已收藏");
+	        }
+	    },
+	    function(e){
+	        hui.iconToast('读取消息失败', 'warn');
 	    }
 	);
 	var html = '<div class="pinglun-list container">';
@@ -319,12 +336,42 @@
 			hui.toast("收费章节需要"+$("#sb").val()+"个书币", 1000);
 		}
 	}
-	function handle(id){
+	function handle($id){
 		var hand = new Array("收藏","打赏","评论");
-		if(hand[id].toString().indexOf("评论")>-1){
+		if(hand[$id].toString().indexOf("评论")>-1){
 			otherPl();
 		}else{
-			hui.toast(hand[id], 1000);
+			var id = localStorage.getItem("id");
+			if(!id){
+				location.href="../login.html";
+			}else{
+				var html = $("#btn_fav").html();
+				if(hand[$id].toString().indexOf("收藏")>-1){
+					if(html.indexOf("已收藏")>-1){
+						hui.toast('你已收藏该小说', 1000);
+						return false;
+					}else{
+						hui.postJSON(
+							rootpath+"/booksCollect/booksCollectAddSave",
+							{
+								booksId:bookId,
+								userId:id
+							},
+							function(msg){
+						        if(msg.result=="fail"){
+						        	hui.toast('收藏失败', 1000);
+						        }else{
+						        	$("#btn_fav").html("已收藏");
+						        	hui.toast('收藏成功', 1000);
+						        }
+						    },
+						    function(e){
+						        hui.iconToast('读取消息失败', 'warn');
+						    }
+						);
+					}
+				}
+			}
 		}
 		
 	}
